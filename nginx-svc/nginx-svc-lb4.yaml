@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-service
+  namespace: default
+  labels:
+     service: http-server
+spec:
+  type: LoadBalancer
+  loadBalancerSourceRanges:
+    - 123.123.123.123/32
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    service: http-server
