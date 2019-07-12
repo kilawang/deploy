@@ -40,5 +40,5 @@ data:
         scrape_interval: 5s
 
         static_configs:
-          - targets: ['watch.spock:9080']
+          - targets: ['127.0.0.1:9080']
 
