@@ -1,12 +1,12 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: nginx
+  name: nginx-v2
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      service: http
+      service: http-server
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -15,20 +15,18 @@ spec:
   minReadySeconds: 5
   template:
     metadata:
-      annotations:
-        sidecar.istio.io/inject: "true"
       labels:
-        service: http
-        version: v1
+        service: http-server
+        version: v2
     spec:
-      #nodeSelector:
-      #  node: wallet
-      volumes:
-        - name: web-index
-          configMap:
-            name: index
+#      initContainers:
+#      - name: increase-fd-ulimit
+#        image: busybox
+#        command: ["sh", "-c", "ulimit -n 65536"]
+#        securityContext:
+#          privileged: true
       containers:
-      - name: nginx
+      - name: nginx-v2
         image: nginx:1.16.1
         imagePullPolicy: IfNotPresent
         ports:
@@ -36,7 +34,3 @@ spec:
         resources:
          requests:
             cpu: 200m
-        volumeMounts:
-          - name: web-index
-            readOnly: true
-            mountPath: /usr/share/nginx/html 

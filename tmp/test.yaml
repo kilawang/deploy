@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kila
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: kila
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        service: kila
+    spec:
+#      nodeSelector:
+#        node: wallet
+      #volumes:
+      #  - name: web-index
+      #    configMap:
+      #      name: index
+      containers:
+      - name: centos
+        image: justdoitmmo/kibana:v2.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources:
+         requests:
+            cpu: 200m
+        #volumeMounts:
+        #  - name: web-index
+        #    readOnly: true
+        #    mountPath: /usr/share/nginx/html 
