@@ -1,12 +1,12 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      service: http
+      name: nginx
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -15,11 +15,9 @@ spec:
   minReadySeconds: 5
   template:
     metadata:
-      annotations:
-        sidecar.istio.io/inject: "true"
       labels:
-        service: http
-        version: v1
+        name: nginx
+        version: v2
     spec:
       #nodeSelector:
       #  node: wallet
@@ -35,7 +33,8 @@ spec:
         - containerPort: 80
         resources:
          requests:
-            cpu: 200m
+            cpu: 50m
+            memory: 100m
         volumeMounts:
           - name: web-index
             readOnly: true

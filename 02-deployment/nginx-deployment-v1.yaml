@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
@@ -6,7 +6,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      service: http-server
+      name: nginx
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -16,9 +16,15 @@ spec:
   template:
     metadata:
       labels:
-        service: http-server
+        name: nginx
+        version: v1
     spec:
-      subdomain: nginx-test
+      #nodeSelector:
+      #  node: wallet
+      volumes:
+        - name: web-index
+          configMap:
+            name: index
       containers:
       - name: nginx
         image: nginx:1.11.5
@@ -26,4 +32,10 @@ spec:
         ports:
         - containerPort: 80
         resources:
-
+         requests:
+            cpu: 50m
+            memory: 100m
+        volumeMounts:
+          - name: web-index
+            readOnly: true
+            mountPath: /usr/share/nginx/html 

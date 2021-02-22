@@ -3,16 +3,15 @@ kind: Service
 metadata:
   annotations:
     cloud.google.com/load-balancer-type: "Internal"
-  name: http-service
+  name: nginx-lb2
   namespace: default
   labels:
      service: http-server
 spec:
   type: LoadBalancer
-  loadBalancerIP: 10.140.0.77
   ports:
   - port: 80
     protocol: TCP
     targetPort: 80
   selector:
-    service: http-server
+    service: nginx
