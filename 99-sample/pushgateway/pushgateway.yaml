@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pushgateway
+spec:
+  serviceName: pushgateway-svc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pushgateway
+  volumeClaimTemplates:
+  - metadata:
+      name: pushgateway-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 30Gi
+  template:
+    metadata:
+      labels:
+        app: pushgateway
+    spec:
+      containers:
+        - name: pushgateway
+          image: prom/pushgateway
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 0
+          ports:
+            - containerPort: 9091
+          resources:
+            limits:
+              cpu: 400m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          volumeMounts:
+            - name: pushgateway-data
+              mountPath: /var/lib/pushgateway/

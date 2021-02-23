@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: prometheus-svc
+  name: pushgateway-svc
   namespace: default
   labels:
-     app: prometheus
+     app: pushgateway
 spec:
   type: LoadBalancer
   ports:
-  - port: 9090
+  - port: 9091
     name: web
     protocol: TCP
-    targetPort: 9090
+    targetPort: 9091
   selector:
-    app: prometheus
+    app: pushgateway
