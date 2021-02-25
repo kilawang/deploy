@@ -7,15 +7,9 @@ metadata:
      app: spock-grafana
 spec:
   type: LoadBalancer
-  loadBalancerSourceRanges:
-    - "114.33.15.96/32"
-    - "220.135.66.50/32"
-    - "34.92.138.202/32"
-    - "125.227.203.97/32"
-    - "125.227.203.98/32"
-    - "34.92.71.66/32"
   ports:
   - port: 3000
+    name: web
     protocol: TCP
     targetPort: 3000
   selector:

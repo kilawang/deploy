@@ -1,7 +1,7 @@
-apiVersion: extensions/v1beta1
+apiVersion: v1
 kind: Deployment
 metadata:
-  name: nginx-v2
+  name: nginx
 spec:
   replicas: 1
   selector:
@@ -17,20 +17,12 @@ spec:
     metadata:
       labels:
         service: http-server
-        version: v2
     spec:
-#      initContainers:
-#      - name: increase-fd-ulimit
-#        image: busybox
-#        command: ["sh", "-c", "ulimit -n 65536"]
-#        securityContext:
-#          privileged: true
+      subdomain: nginx-test
       containers:
-      - name: nginx-v2
-        image: nginx:1.16.1
+      - name: nginx
+        image: nginx:1.11.5
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
-        resources:
-         requests:
-            cpu: 200m
+

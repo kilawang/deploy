@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pushgateway-svc
+  namespace: default
+  labels:
+     app: pushgateway
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 9091
+    name: web
+    protocol: TCP
+    targetPort: 9091
+  selector:
+    app: pushgateway

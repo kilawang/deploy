@@ -6,9 +6,10 @@ metadata:
   labels:
      app: prometheus
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
   - port: 9090
+    name: web
     protocol: TCP
     targetPort: 9090
   selector:
