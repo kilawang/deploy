@@ -3,10 +3,9 @@ kind: Service
 metadata:
   annotations:
     cloud.google.com/load-balancer-type: "Internal"
-  name: nginx-lb2
-  namespace: default
+  name: nginx-svc-kila-lb2
   labels:
-     service: http-server
+     service: nginx-kila
 spec:
   type: LoadBalancer
   ports:
@@ -14,4 +13,4 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    service: nginx
+    service: nginx-kila
