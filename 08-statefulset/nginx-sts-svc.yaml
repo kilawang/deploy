@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-sts-svc
+  namespace: default
+  labels:
+     app: nginx-sts
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    name: web
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: nginx-sts
