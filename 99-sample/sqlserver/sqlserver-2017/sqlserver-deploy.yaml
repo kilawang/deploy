@@ -1,21 +1,12 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: sqlserver-sts
+  name: sqlserver-deployment
 spec:
-  serviceName: sqlserver-svc
   replicas: 1
   selector:
     matchLabels:
       app: ms-sqlserver
-  volumeClaimTemplates:
-    - metadata:
-        name: sqlserver-volume
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 200Gi
   template:
     metadata:
       labels:
@@ -38,16 +29,7 @@ spec:
         volumeMounts:
         - name: sqlserver-volume
           mountPath: /var/opt/mssql
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: sqlserver-svc
-spec:
-  selector:
-    app: ms-sqlserver
-  ports:
-    - protocol: TCP
-      port: 1433
-      targetPort: 1433
-  type: LoadBalancer
+      volumes:
+      - name: sqlserver-volume
+        persistentVolumeClaim:
+          claimName: sqlserver-volume
