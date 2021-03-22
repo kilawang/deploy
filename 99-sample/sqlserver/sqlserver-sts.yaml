@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sqlserver-sts
+spec:
+  serviceName: sqlserver-svc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-sqlserver
+  volumeClaimTemplates:
+    - metadata:
+        name: sqlserver-volume
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 200Gi
+  template:
+    metadata:
+      labels:
+        app: ms-sqlserver
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: ms-sqlserver
+        image: mcr.microsoft.com/mssql/server:2017-latest
+        ports:
+        - containerPort: 1433
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sqlserver-secret
+              key: SA_PASSWORD
+        volumeMounts:
+        - name: sqlserver-volume
+          mountPath: /var/opt/mssql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlserver-svc
+spec:
+  selector:
+    app: ms-sqlserver
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1433
+  type: LoadBalancer

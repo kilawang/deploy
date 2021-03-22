@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqlserver-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-sqlserver
+  template:
+    metadata:
+      labels:
+        app: ms-sqlserver
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: ms-sqlserver
+        image: mcr.microsoft.com/mssql/server:2017-latest
+        ports:
+        - containerPort: 1433
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sqlserver-secret
+              key: SA_PASSWORD
+        volumeMounts:
+        - name: sqlserver-volume
+          mountPath: /var/opt/mssql
+      volumes:
+      - name: sqlserver-volume
+        persistentVolumeClaim:
+          claimName: sqlserver-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlserver-deployment
+spec:
+  selector:
+    app: ms-sqlserver
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1433
+  type: LoadBalancer
