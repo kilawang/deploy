@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-kila
+  name: nginx-v1
   namespace: kila
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: nginx-kila
+      service: nginx
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       labels:
-        service: nginx-kila
+        service: nginx
         version: v1
     spec:
       #nodeSelector:
@@ -25,7 +25,7 @@ spec:
       volumes:
         - name: web-index
           configMap:
-            name: index-kila
+            name: index
       containers:
       - name: nginx
         image: nginx:1.11.5

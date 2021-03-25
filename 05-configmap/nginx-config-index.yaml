@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: index
+  name: index-v1
   namespace: kila
 data:
   index.html: |

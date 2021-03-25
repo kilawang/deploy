@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-svc-kila-hl
+  name: nginx-svc-hl
+  namespace: kila
   labels:
-     service: nginx-kila
+     service: nginx
 spec:
   clusterIP: None
   ports:
@@ -11,4 +12,4 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    service: nginx-kila
+    service: nginx
