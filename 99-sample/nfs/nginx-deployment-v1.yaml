@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-v1
+  namespace: kila
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: nginx
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        service: nginx
+        version: v1
+    spec:
+      #nodeSelector:
+      #  node: wallet
+      volumes:
+        - name: web-index
+          configMap:
+            name: index-v1
+        - name: nfs
+          persistentVolumeClaim:
+            claimName: test-dynamic-volume-claim
+      containers:
+      - name: nginx
+        image: nginx:1.11.5
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources:
+         requests:
+            cpu: 50m
+            memory: 100m
+        volumeMounts:
+          - name: web-index
+            readOnly: true
+            mountPath: /usr/share/nginx/html
+          - name: nfs
+            mountPath: /nfs
