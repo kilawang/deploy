@@ -25,6 +25,12 @@ spec:
           value: "Developer"
         - name: ACCEPT_EULA
           value: "Y"
+        - name: MSSQL_COLLATION
+          value: "Chinese_Taiwan_Stroke_CI_AS"
+        - name: MSSQL_AGENT_ENABLED
+          value: "true"
+        - name: TZ
+          value: "Asia/Taipei"
         - name: SA_PASSWORD
           valueFrom:
             secretKeyRef:
