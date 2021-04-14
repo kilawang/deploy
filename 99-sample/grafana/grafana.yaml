@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: spock-grafana
+  name: grafana
 spec:
-  serviceName: spock-grafana-svc
+  serviceName: grafana-svc
   replicas: 1
   selector:
     matchLabels:
-      app: spock-grafana
+      app: grafana
   volumeClaimTemplates:
   - metadata:
       name: grafana-data
@@ -19,10 +19,10 @@ spec:
   template:
     metadata:
       labels:
-        app: spock-grafana
+        app: grafana
     spec:
       containers:
-        - name: spock-grafana
+        - name: grafana
           image: grafana/grafana
           imagePullPolicy: IfNotPresent
           securityContext:

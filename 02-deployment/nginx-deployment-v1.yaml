@@ -25,7 +25,7 @@ spec:
       volumes:
         - name: web-index
           configMap:
-            name: index
+            name: index-v1
       containers:
       - name: nginx
         image: nginx:1.11.5
@@ -39,4 +39,5 @@ spec:
         volumeMounts:
           - name: web-index
             readOnly: true
-            mountPath: /usr/share/nginx/html 
+            mountPath: /usr/share/nginx/html
+            #subPath: index.html 

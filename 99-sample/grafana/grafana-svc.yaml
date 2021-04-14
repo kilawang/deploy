@@ -1,10 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: spock-grafana-svc
-  namespace: default
+  name: grafana-svc
   labels:
-     app: spock-grafana
+     app: grafana
 spec:
   type: LoadBalancer
   ports:
@@ -13,4 +12,4 @@ spec:
     protocol: TCP
     targetPort: 3000
   selector:
-    app: spock-grafana
+    app: grafana

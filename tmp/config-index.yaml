@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: index
-  namespace: default
-data:
-  index.html: |
-    hello world 
-    2020/07/14 
