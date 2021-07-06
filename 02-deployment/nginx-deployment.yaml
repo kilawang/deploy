@@ -2,11 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-kila
+  namespace: kila
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: nginx-kila
+      service: nginx
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -16,7 +17,7 @@ spec:
   template:
     metadata:
       labels:
-        service: nginx-kila
+        service: nginx
     spec:
       containers:
       - name: nginx

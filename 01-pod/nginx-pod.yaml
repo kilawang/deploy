@@ -11,3 +11,6 @@ spec:
      image: nginx:1.11.5
      ports:
      - containerPort: 80
+     env:
+     - name: TZ
+       value: Asia/Taipei

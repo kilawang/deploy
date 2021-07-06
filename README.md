@@ -6,7 +6,12 @@ https://cloud.google.com/sdk/docs/install
 K9S
 https://k9scli.io/topics/install/
 
-fish
+fish (linux or mac)
 https://fishshell.com/
-
 https://github.com/evanlucas/fish-kubectl-completions
+
+kubectx
+https://github.com/ahmetb/kubectx
+
+lens
+https://k8slens.dev/

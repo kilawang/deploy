@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nginx-svc-lb
-  namespace: kila
+  #namespace: kila
   labels:
      service: nginx
 spec:
