@@ -1,0 +1,23 @@
+#部署
+kubectl apply -f test.yaml
+
+#刪除
+kubectl delete -f test.yaml
+kubectl delete pod PODNAME -n NAMESPACE
+kubectl delete pod/PODNAME -n NAMESPACE
+
+
+#取得資訊
+kubectl get pod -n NAMESPACE
+kubectl get svc -n NAMESPACE
+kubectl get deploy -n NAMESPACE
+
+#取得詳細資訊
+kubectl describe PODNAME -n NAMESPACE
+
+#進入pod
+kubectl exec -it PODNAME -n NAMESPACE -- /bin/bash
+
+
+指令查詢
+https://kubernetes.io/zh/docs/reference/kubectl/overview/
