@@ -6,7 +6,6 @@ kubectl delete -f test.yaml
 kubectl delete pod PODNAME -n NAMESPACE
 kubectl delete pod/PODNAME -n NAMESPACE
 
-
 #取得資訊
 kubectl get pod -n NAMESPACE
 kubectl get svc -n NAMESPACE
@@ -17,6 +16,11 @@ kubectl describe PODNAME -n NAMESPACE
 
 #進入pod
 kubectl exec -it PODNAME -n NAMESPACE -- /bin/bash
+kubectl exec -it PODNAME -n NAMESPACE -- /bin/sh
+
+#port轉發
+kubectl port-forward pod/PODNAME -n NAMESPCAE 8080:80
+kubectl port-forward svc/SVCNAME -n NAMESPACE 8080:80
 
 
 指令查詢
