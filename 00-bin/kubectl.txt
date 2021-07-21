@@ -22,6 +22,24 @@ kubectl exec -it PODNAME -n NAMESPACE -- /bin/sh
 kubectl port-forward pod/PODNAME -n NAMESPCAE 8080:80
 kubectl port-forward svc/SVCNAME -n NAMESPACE 8080:80
 
+#deplpyment pod擴充
+kubectl scale deploy/nginx --replicas=2
+
+#deployment 更新
+kubectl set image deployment/nginx nginx=nginx:1.16.1 --record
+
+#deployment 更新紀錄
+kubectl rollout history deploy/nginx
+
+#deployment 退版
+kubectl rollout undo deploy/nginx
+
+#deploymenet 退回指定版本
+kubectl rollout undo deploy/nginx --to-revision=2
+
+#deployment 全部pod重啟
+kubectl kubectl rollout restart deploy/nginx
+
 
 指令查詢
 https://kubernetes.io/zh/docs/reference/kubectl/overview/
