@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: index-v2
-  namespace: kila
-data:
-  index.html: |
-    hello world 
-    2019/11/18 

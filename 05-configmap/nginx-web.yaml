@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-html
+  namespace: kila
+data:
+  kila.html: |
+    test kila 
+    2021/07/23
+    configmap 123
+  test.html: |
+    test test 
+    2021/07/23
+    configmap 456

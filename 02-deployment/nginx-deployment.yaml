@@ -4,7 +4,7 @@ metadata:
   name: nginx-kila
   namespace: kila
 spec:
-  replicas: 1
+  replicas: 7
   selector:
     matchLabels:
       service: nginx
@@ -27,10 +27,10 @@ spec:
         - containerPort: 80
           name: web
         - containerPort: 443
-          name: ssl
+          name: https
         resources:
           limits:
-            cpu: 300m
+            cpu: 100m
             memory: 256Mi
           requests:
             cpu: 50m
