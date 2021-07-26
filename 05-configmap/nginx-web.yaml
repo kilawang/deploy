@@ -5,10 +5,14 @@ metadata:
   namespace: kila
 data:
   kila.html: |
-    test kila 
+    v3 kila 
     2021/07/23
     configmap 123
   test.html: |
-    test test 
+    v3 test 
     2021/07/23
     configmap 456
+  index.html: |
+    v3 index 
+    2021/07/23
+    configmap 789
