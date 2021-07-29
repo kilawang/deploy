@@ -29,14 +29,12 @@ spec:
          requests:
             cpu: 50m
             memory: 100m
+         limits:
+            cpu: 100m
+            memory: 256Mi
         envFrom:
           - configMapRef:
               name: env
-        #volumeMounts:
-        #  - name: index-v1
-        #    readOnly: true
-        #    mountPath: /usr/share/nginx/html
-            #subPath: index.html 
         volumeMounts:
           - name: data-volume
             mountPath: /var/www/html
