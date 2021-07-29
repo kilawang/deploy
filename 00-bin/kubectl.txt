@@ -12,7 +12,7 @@ kubectl get svc -n NAMESPACE
 kubectl get deploy -n NAMESPACE
 
 #取得詳細資訊
-kubectl describe PODNAME -n NAMESPACE
+kubectl describe pod PODNAME -n NAMESPACE
 
 #進入pod
 kubectl exec -it PODNAME -n NAMESPACE -- /bin/bash
@@ -39,6 +39,18 @@ kubectl rollout undo deploy/nginx --to-revision=2
 
 #deployment 全部pod重啟
 kubectl kubectl rollout restart deploy/nginx
+
+#檢查log
+kubectl logs pod -n NAMESPACE 
+
+#確認configmap
+kubectl get cm -n NAMESPACE
+
+#取得configmap內容
+kubectl get cm CONFIGMAPNAME -n NAMESPACE  -o yaml
+
+#確認secret
+kubectl get secret -n NAMESPACE
 
 
 指令查詢
