@@ -2,11 +2,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: data-volume
-  namespace: kila
+  namespace: web
 spec:
   #storageClassName: faster
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 300Gi
+      storage: 10Gi

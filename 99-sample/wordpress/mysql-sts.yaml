@@ -1,17 +1,26 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql-sts
+  name: mysql
+  namespace: web
 spec:
-  serviceName: mysql-sts-svc
+  serviceName: mysql-svc
   replicas: 1
   selector:
     matchLabels:
-      app: mysql-sts
+      app: mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
   template:
     metadata:
       labels:
-        app: mysql-sts
+        app: mysql
     spec:
       containers:
         - name: mysql
@@ -24,6 +33,8 @@ spec:
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: "123456"
+            - name: MYSQL_DATABASE
+              value: wp
           resources:
             limits:
               cpu: 400m
@@ -31,3 +42,6 @@ spec:
             requests:
               cpu: 200m
               memory: 256Mi
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql

@@ -2,12 +2,22 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mysql-sts
+  namespace: kila
 spec:
   serviceName: mysql-sts-svc
   replicas: 1
   selector:
     matchLabels:
       app: mysql-sts
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-data
+    spec:
+      storageClassName: faster
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
   template:
     metadata:
       labels:
@@ -31,3 +41,6 @@ spec:
             requests:
               cpu: 200m
               memory: 256Mi
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql

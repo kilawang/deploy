@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  namespace: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources:
+         requests:
+            cpu: 50m
+            memory: 100m
+        envFrom:
+          - configMapRef:
+              name: env
+        #volumeMounts:
+        #  - name: index-v1
+        #    readOnly: true
+        #    mountPath: /usr/share/nginx/html
+            #subPath: index.html 
+        volumeMounts:
+          - name: data-volume
+            mountPath: /var/www/html
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: data-volume

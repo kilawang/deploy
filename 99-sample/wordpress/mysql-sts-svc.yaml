@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-sts-svc
-  namespace: kila
+  name: mysql-svc
+  namespace: web
   labels:
-     app: mysql-sts
+     app: mysql
 spec:
   type: LoadBalancer
   ports:
   - port: 3306
-    name: web
+    name: mysql
     protocol: TCP
     targetPort: 3306
   selector:
-    app: mysql-sts
+    app: mysql

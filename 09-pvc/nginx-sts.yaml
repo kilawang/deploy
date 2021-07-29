@@ -2,12 +2,21 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: nginx-sts
+  namespace: kila
 spec:
   serviceName: nginx-sts-svc
   replicas: 1
   selector:
     matchLabels:
       app: nginx-sts
+  volumeClaimTemplates:
+  - metadata:
+      name: nginx-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
   template:
     metadata:
       labels:
@@ -28,3 +37,6 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
+          volumeMounts:
+            - name: nginx-data
+              mountPath: /data
