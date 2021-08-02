@@ -13,7 +13,7 @@ spec:
   - metadata:
       name: mysql-data
     spec:
-      storageClassName: faster
+      #storageClassName: faster
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:

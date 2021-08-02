@@ -52,6 +52,11 @@ kubectl get cm CONFIGMAPNAME -n NAMESPACE  -o yaml
 #確認secret
 kubectl get secret -n NAMESPACE
 
+#確認sts
+kubectl get sts -n NAMESPACE
+
+#確認pvc
+kubectl get pvc -n NAMESPACE
 
 指令查詢
 https://kubernetes.io/zh/docs/reference/kubectl/overview/
