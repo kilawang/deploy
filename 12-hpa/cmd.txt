@@ -1,0 +1,2 @@
+#ab test cmd
+ab -c 5000 -n 2000000 http://tomcat-svc:80/

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-tomcat
+  namespace: kila
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dp-tomcat
+  template:
+    metadata:
+      labels:
+        app: dp-tomcat
+    spec:
+      containers:
+      - name: dp-tomcat
+        image: tomcat:9.0
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 8080
+          name: web

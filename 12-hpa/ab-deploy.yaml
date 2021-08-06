@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abcontainer
+  namespace: kila
+spec:
+  selector:
+    matchLabels:
+      app: abcontainer
+  template:
+    metadata:
+      labels:
+        app: abcontainer
+    spec:
+      containers:
+      - name: abcontainer
+        image: httpd
+        ports:
+        - containerPort: 80
