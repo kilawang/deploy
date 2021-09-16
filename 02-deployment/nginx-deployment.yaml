@@ -4,7 +4,7 @@ metadata:
   name: nginx-kila
   namespace: kila
 spec:
-  replicas: 7
+  replicas: 5
   selector:
     matchLabels:
       service: nginx
