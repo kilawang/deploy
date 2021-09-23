@@ -7,14 +7,14 @@ spec:
   persistentVolumeReclaimPolicy: Delete
   storageClassName: ""
   capacity:
-    storage: 300G
+    storage: 100G
   accessModes:
     - ReadWriteOnce
   claimRef:
     namespace: sqlserver
     name: sqlserver-volume-pvc
   gcePersistentDisk:
-    pdName: sqlserver-copy
+    pdName: dev-sqlserver-bak
     fsType: ext4
 ---
 apiVersion: v1
@@ -28,4 +28,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 300G
+      storage: 100G

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sqlserver-hosts-1
+  namespace: sqlserver
+data:
+  hosts: |
+    127.0.0.1   localhost
+    127.0.0.1	172.16.10.212
+    127.0.0.1	2ND_DB1_DBLINK
+    127.0.0.1	POINTDB
+    127.0.0.1	SYNCDB
+    127.0.0.1	sqlserver-sts-0

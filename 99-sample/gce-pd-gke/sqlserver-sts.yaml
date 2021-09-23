@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sqlserver-sts
+  namespace: sqlserver
+spec:
+  serviceName: sqlserver-svc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-sqlserver
+  template:
+    metadata:
+      labels:
+        app: ms-sqlserver
+    spec:
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 10001
+      containers:
+      - name: ms-sqlserver
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+        - containerPort: 1433
+        resources:
+          requests:
+            cpu: 4
+            memory: 8Gi
+          limits:
+            cpu: 6
+            memory: 10Gi
+        env:
+        - name: MSSQL_PID
+          value: "Developer"
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: MSSQL_COLLATION
+          value: "Chinese_Taiwan_Stroke_CI_AS"
+        - name: MSSQL_AGENT_ENABLED
+          value: "true"
+        - name: TZ
+          value: "Asia/Taipei"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sqlserver-secret
+              key: SA_PASSWORD
+        volumeMounts:
+        - name: sqlserver-volume
+          mountPath: /var/opt/mssql
+        - name: bak-volume
+          mountPath: /var/opt/bak
+        - name: sqlserver-hosts
+          readOnly: true
+          mountPath: /etc/hosts
+          subPath: hosts
+      volumes:
+      - name: sqlserver-volume
+        persistentVolumeClaim:
+          claimName: sqlserver-volume-0
+      - name: bak-volume
+        persistentVolumeClaim:
+          claimName: sqlserver-volume-bak
+      - name: sqlserver-hosts
+        configMap:
+          name: sqlserver-hosts

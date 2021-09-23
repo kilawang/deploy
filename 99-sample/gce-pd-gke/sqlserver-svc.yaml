@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlserver-svc
+  namespace: sqlserver
+spec:
+  selector:
+    app: ms-sqlserver
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1433
+  type: LoadBalancer
+  loadBalancerIP: 35.229.233.232
+  loadBalancerSourceRanges:
+    - "18.139.105.233/32"
