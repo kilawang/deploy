@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-kila
+  name: nginx-web
   namespace: kila
 spec:
   replicas: 1
@@ -19,19 +19,28 @@ spec:
       labels:
         service: nginx
     spec:
+      volumes:
+        - name: index-v1
+          configMap:
+            name: index-v1
       containers:
       - name: nginx
         image: nginx:1.11.5
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
-          name: web
-        - containerPort: 443
-          name: https
         resources:
-          limits:
+         requests:
+            cpu: 50m
+            memory: 100Mi
+         limits:
             cpu: 100m
             memory: 256Mi
-          requests:
-            cpu: 50m
-            memory: 64Mi
+        envFrom:
+          - configMapRef:
+              name: env
+        volumeMounts:
+          - name: index-v1
+            readOnly: true
+            mountPath: /usr/share/nginx/html
+            #subPath: index.html 
