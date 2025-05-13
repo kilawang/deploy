@@ -1,0 +1,27 @@
+---
+# Source: redis/templates/networkpolicy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: redis-one
+  namespace: "redis"
+  labels:
+    app.kubernetes.io/instance: redis-one
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: 7.4.2
+    helm.sh/chart: redis-20.11.3
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: redis-one
+      app.kubernetes.io/name: redis
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - {}
+  ingress:
+    # Allow inbound connections
+    - ports:
+        - port: 6379

@@ -1,0 +1,187 @@
+---
+# Source: redis/templates/master/application.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-one-master
+  namespace: "redis"
+  labels:
+    app.kubernetes.io/instance: redis-one
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: 7.4.2
+    helm.sh/chart: redis-20.11.3
+    app.kubernetes.io/component: master
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: redis-one
+      app.kubernetes.io/name: redis
+      app.kubernetes.io/component: master
+  serviceName: redis-one-headless
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: redis-one
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: redis
+        app.kubernetes.io/version: 7.4.2
+        helm.sh/chart: redis-20.11.3
+        app.kubernetes.io/component: master
+      annotations:
+        checksum/configmap: 2a9ab4a5432825504d910f022638674ce88eaefe9f9f595ad8bc107377d104fb
+        checksum/health: aff24913d801436ea469d8d374b2ddb3ec4c43ee7ab24663d5f8ff1a1b6991a9
+        checksum/scripts: 52616d292a20e8bb09d1fb58e3dee5ebef0339a3378a661f35b389b0409c23c4
+        checksum/secret: 6d6e2a08ceb1e2089f1864d6f01fb8e385f61ca6d60375440405602737541694
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      serviceAccountName: redis-one-master
+      automountServiceAccountToken: false
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: redis-one
+                    app.kubernetes.io/name: redis
+                    app.kubernetes.io/component: master
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      enableServiceLinks: true
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: redis
+          image: docker.io/bitnami/redis:7.4.2-debian-12-r4
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          command:
+            - /bin/bash
+          args:
+            - -c
+            - /opt/bitnami/scripts/start-scripts/start-master.sh
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: REDIS_REPLICATION_MODE
+              value: master
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "no"
+            - name: REDIS_PASSWORD_FILE
+              value: "/opt/bitnami/redis/secrets/redis-password"
+            - name: REDIS_TLS_ENABLED
+              value: "no"
+            - name: REDIS_PORT
+              value: "6379"
+          ports:
+            - name: redis
+              containerPort: 6379
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            # One second longer than command timeout should prevent generation of zombie processes.
+            timeoutSeconds: 6
+            successThreshold: 1
+            failureThreshold: 5
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_liveness_local.sh 5
+          readinessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 5
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_readiness_local.sh 1
+          resources:
+            limits:
+              cpu: 150m
+              ephemeral-storage: 2Gi
+              memory: 192Mi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 50Mi
+              memory: 128Mi
+          volumeMounts:
+            - name: start-scripts
+              mountPath: /opt/bitnami/scripts/start-scripts
+            - name: health
+              mountPath: /health
+            - name: redis-password
+              mountPath: /opt/bitnami/redis/secrets/
+            - name: redis-data
+              mountPath: /data
+            - name: config
+              mountPath: /opt/bitnami/redis/mounted-etc
+            - name: empty-dir
+              mountPath: /opt/bitnami/redis/etc/
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+      volumes:
+        - name: start-scripts
+          configMap:
+            name: redis-one-scripts
+            defaultMode: 0755
+        - name: health
+          configMap:
+            name: redis-one-health
+            defaultMode: 0755
+        - name: redis-password
+          
+          secret:
+            secretName: redis-one
+            items:
+            - key: redis-password
+              path: redis-password
+        - name: config
+          configMap:
+            name: redis-one-configuration
+        - name: empty-dir
+          emptyDir: {}
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: redis-data
+        labels:
+          app.kubernetes.io/instance: redis-one
+          app.kubernetes.io/name: redis
+          app.kubernetes.io/component: master
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"

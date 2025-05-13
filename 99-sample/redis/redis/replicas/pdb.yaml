@@ -1,0 +1,21 @@
+---
+# Source: redis/templates/replicas/pdb.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: redis-one-replicas
+  namespace: "redis"
+  labels:
+    app.kubernetes.io/instance: redis-one
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: 7.4.2
+    helm.sh/chart: redis-20.11.3
+    app.kubernetes.io/component: replica
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: redis-one
+      app.kubernetes.io/name: redis
+      app.kubernetes.io/component: replica
